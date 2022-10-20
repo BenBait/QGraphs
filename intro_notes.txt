@@ -1,0 +1,41 @@
+H = T + V
+
+T -> kinetic energy corresponds to a Laplacian; we want to apply this Laplacian to a graph
+
+V -> Potential energy (problem specific); i.e.) for Grover's algorithm
+
+Given this potential, how do we scale the Laplacian with a parameter gamma
+
+H = T(gamma) + V
+
+Vary gamma to find optimal Hamiltonian
+
+Complete graph: every node conects to another node
+If the graph is complete, there is a unique gamma for which optimal Hamiltionian is found
+for the Grover search algorithm
+
+Laplacian gives you the probabilities that you go to another vertex
+
+   n1
+n2     n3
+
+prob(ni -> nj : i =/= j) = 1/2
+
+So graph Laplacian is    1    -1/2   -1/2
+                        -1/2  1      -1/2
+						-1/2  -1/2    1
+
+Note that this is the scaled version of the Degree Matrix - Adjacency Matrix
+
+The diagonals don't have probablistic interpretations; it makes it so that the sum of each
+row is zero -> hence, we have a stochastic matrix (which makes it easy to find that the
+ground state is zero)
+
+(1 1 1 1)^T is an eigenstate (with 0 eigenvalue, which means it is harmonic)
+Laplacian*v = 0 ==> v is harmonic
+
+How is this related to kinetic energy?
+Consider the discretization techniques for numerical differentiation
+Now we make a Lattice instead of a Triangle
+
+TASK: Code that generates the graph Laplacian on G_{3,p} which depend on the parameter p

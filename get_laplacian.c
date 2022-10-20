@@ -1,10 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-// maybe use matrix as a header file instead of a file that 
-// produces separate matrix binaries
-// #include "Matrix.h"
-
 typedef int T;
 
 /* sum of a row is the degree of that node in the adjacency matrix, A */

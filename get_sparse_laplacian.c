@@ -1,132 +1,69 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <assert.h>
+// functions for generating matrices
+#include "SparseM.h"
 
-typedef int T;
+int main (int argc, char *argv[]) {
 
-typedef struct SparseM_entry {
-    int r,c;
-    T val;
-} SparseM_entry;
+    // n_complete is the number of nodes before segmentation
+    if (argc < 2) fprintf(stderr, "PASS 2 1 DIGIT ARGUMENTS: n and Print(0 or 1)\n"); exit -1;
 
-typedef struct SparseM {
-    SparseM_entry *data;
-} SparseM;
+    // if Pr, print
+    int Pr = atoi(argv[2]);
+    // number of nodes before segmenting
+    int n_complete = atoi(argv[1]);
+    // segs in the number of segments in each edge after decomposing
+    int segs = 3;
+    // we have to get the number of paths through the inside of the graph
+    // the first 2 nodes have n_complete - 2 connections
+    // the next n_complete nodes have n_complete - m - 2
+    int num_inside = 2*(n_complete - segs);
+    // now there are n_complete - 2 more nodes, each with 1 fewer new path
+    int added_edges = n_complete - segs - 1;
+    // added_edges is 0 
+    while (added_edges > 0) {
+        num_inside += added_edges;
+        added_edges--;
+    }
+    // n in the adjacency matrix for the segmented matrix
+    unsigned long n = n_complete*segs + num_inside*(segs - 1);
+    printf("n: %ld\n", n);
 
-/* sum of a row is the degree of that node in the adjacency matrix, A */
-/* A is just one row */
-int *get_degree(SparseM *A, int num_entries, int n) {
+    // original entries have (n_complete - 1) adjacencies, 
+    // nodes in segments each have 2 adjacencies
+    //int num_entries = n_complete*(n_complete - 1) + (n-n_complete)*2;
+    int num_entries = 100000000;
 
-    // loop counter
-    int i = 0;
-    // row and column counters
-    int r = 0;
-    int c = 0;
-    // d contains the diagonal elements of the degree matrix
-    // i.e. d[i] = D_ii
-    int *d = calloc(n, sizeof(T));
+    // This is the probability parameter p (was 1/2 initially)
+    T p = 0.2;
 
-    // accumulate the value of d for each row in this var
-    int curr_d = 0;
-    int idx = 0;
+    SparseM *A = get_segmented_complete(num_entries, n, n_complete, p, segs);
 
-    for (i = 0; i < num_entries; i++) {
-        // get nonzero entries
-        r = (A->data[i]).r;
-        // don't actually need the column here
+    if (P) {
+        printf("A:\n");
+        print_SparseM(A, num_entries, n);
+    }
+    printf("Checking if rows all sum to one...\n");
+    dumb_row_sum_SparseM(A, num_entries, n, P);
+    printf("looks good\n");
 
-        // accumulate the degree for each entry
-        d[r] += (A->data[i]).val;
+
+    // get_laplacian turns the adjacency matrix in to the degree matrix
+    SparseM *L = get_laplacian(A, num_entries, n);
+    // entries in the Laplacian is equal to entries in the adjacecncy matrix
+    // plus the diagonal (which is all 0 in A)
+    // don't worry, this is calculated in get_laplacian, we just need it for printing
+    int num_L_entries = num_entries + n;
+
+    if (P) {
+        printf("\nL:\n");
+        print_SparseM(L, num_L_entries, n);
     }
 
-    return d;
-}
-
-/* Laplacian is the degree matrix minus the adjacency matrix */
-SparseM *get_laplacian(SparseM *A, int num_entries, int n) {
-
-    // loop counter
-    int i = 0;
-    // get the diagonals of the degree matrix
-    int *d = get_degree(A, num_entries, n);
-    
-    // row and column indices
-    int r = 0;
-    int c = 0;
-
-    // index in the adjacency matrix
-    int idx = 0;
-
-    // update the Laplacian in A, might be better to have it all in place
-    // L = D - A, D is diagonal
-    // 
-    // NEED TO ADD BOUNDS CHECKING: NOT MORE THAN N VALUES FOR ANY GIVEN R
-    for (i = 0; i < num_entries; i++) {
-        // get nonzero entries
-        (A->data[i]).val = (-1) * (A->data[i]).val;
-
-        c = (A->data[i]).c;
-        r = (A->data[i]).r;
-
-        if (r == c)
-            (A->data[i]).val += d[r];
-    }
-
-    free(d);
-    return A;
-}
-
-int main(int argc, char *argv[]) {
-
-    // loop counter
-    int i = 0;
-    // dimension of matrix
-    int n = 3;
-    // number of nonzero entries in the identity matrix
-    int num_entries = n;
-
-    SparseM *A = malloc(sizeof(SparseM));
-    A->data    = malloc(num_entries*sizeof(SparseM_entry));
-
-    // make identity matrix
-    for (int i = 0; i < n; i++) {
-        // NEED BOUND CHECKING
-        (A->data[i]).r = i;
-        (A->data[i]).c = i;
-        (A->data[i]).val = 1;
-    }
-
-    // get_laplacian turns the adjacency matrix in to the degree matrix,
-    // in place
-    A = get_laplacian(A, num_entries, n);
-    // row and column counters
-    int r = 0;
-    int c = 0;
-    // value at nonzero entry
-    int val = 0;
-
-    printf("(r, c, value)\n");
-
-    for (i = 0; i < num_entries; i++) {
-        // get nonzero entries
-        c = (A->data[i]).c;
-        r = (A->data[i]).r;
-        val = (A->data[i]).val;
-        printf("(%d, %d, %d)\n", r, c, val);
-    }
-    /*
-     * WILL WORK ON PRINTING OUT FULL MATRIX
-
-    //counter through adjacency matrix
-    int idx = 0;
-    for (r = 0; r < n; r++) {
-        for (c = 0; c < n; c++) {
-            idx = c + r*n;
-            printf("%d\t", A[idx]);
-        }
-        printf("\n");
-    }
-    */
-
+    free(A->data);
     free(A);
+    free(L->data);
+    free(L);
     return 0;
 }
