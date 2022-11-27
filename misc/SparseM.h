@@ -164,7 +164,7 @@ void add_path (SparseM *A, unsigned long n, int n_complete, int num_entries, int
 
 /* generates the adjacency matrix for a complete matrix with n_complete entries
  * and is then segmented */
-SparseM *get_segmented_complete (int num_entries, int n_complete, T p, int segs)
+SparseM *get_segmented_complete (int num_entries, int n, int n_complete, T p, int segs)
 {
     SparseM *A = malloc(sizeof(SparseM));
     assert(A != NULL);
@@ -178,22 +178,20 @@ SparseM *get_segmented_complete (int num_entries, int n_complete, T p, int segs)
     int n_in = n_complete - 3;
     int end_N;
 
-    // next_N is the index of the first node in the segmented edge after the
-    // orig node
-    int next_N = 1;
+    // next_N is the index of the first node after the n_complete nodes
+    int next_N = n_complete;
 
     // idx keeps track of the number of entries in the sparse matrix
     int idx = 0;
 
     int num_paths = 0;
     // add the segmented edges between all of the original nodes
-    for (j = 0; j <= (n_complete-1)*segs; j += segs) {
-        add_path(A, n, n_complete, num_entries, j, (j+segs) % (n_complete*segs), next_N, p, &idx);
-        next_N += 3;
+    for (j = 0; j < n_complete; j++) {
+        // for 3 segs per edge, a path will first be added between node 0 and node 1
+        add_path(A, n, n_complete, num_entries, j, (j+1) % n_complete, next_N, p, &idx);
+        next_N += 2;
         num_paths++;
     }
-    // the next node is the first in the 0 <-> 6 path (for all n), so we went past it
-    next_N -= 1;
     /*
     // Optional Test part 1
     assert(num_paths == n_complete);
@@ -201,12 +199,12 @@ SparseM *get_segmented_complete (int num_entries, int n_complete, T p, int segs)
 
     // The outside nodes are multiples of 3
     // Add the paths between the first 2 non sequential perimeter nodes
-    for (j = 0; j < 2*segs; j+=segs) {
+    for (j = 0; j < 2; j++) {
         // j is the start node
         for (k = 2; k < n_in+2; k++) {
             // k calculates the end node, and it starts at 2, so it ends at the
             // number of inside paths + 2
-            end_N = k*segs + j;
+            end_N = k + j;
             add_path(A, n, n_complete, num_entries, j, end_N, next_N, p, &idx);
             num_paths++;
             next_N += 2;
@@ -221,12 +219,12 @@ SparseM *get_segmented_complete (int num_entries, int n_complete, T p, int segs)
 
     // increment this to avoid duplicate paths
     int m = 1;
-    for (j = segs*2; j <= (n_complete-1)*segs; j += segs) {
+    for (j = 2; j < n_complete; j++) {
         // j is the start node
         for (k = 2; k < (n_in-m)+2; k++) {
             // k calculates the end node, and it starts at 2, so it ends at the
             // number of inside paths + 2
-            end_N = k*segs + j;
+            end_N = k + j;
             // the final "next N" will be n, which is too big
             add_path(A, n, n_complete, num_entries, j, end_N, next_N, p, &idx);
             next_N += 2;
@@ -298,7 +296,7 @@ SparseM *get_laplacian(SparseM *A,
     
     // get the diagonals of the degree matrix
     int *d = get_degree(A, num_entries, n);
-    
+
     // row and column indices
     int r = 0;
     int c = 0;
@@ -312,7 +310,7 @@ SparseM *get_laplacian(SparseM *A,
         // note that this only iterates through n of num_L_entries
         (L->data[i]).r = i;
         (L->data[i]).c = i;
-        (L->data[i]).val = d[i];
+        (L->data[i]).val = (T)d[i];
     }
  
     // NEED TO ADD BOUNDS CHECKING: NOT MORE THAN N VALUES FOR ANY GIVEN R

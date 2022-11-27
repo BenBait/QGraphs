@@ -1,0 +1,17 @@
+Code for Ben Maloy's 2023 Master's Thesis
+
+The point of this code is to numerically determine if the probability of
+finding an entry in a graph structured database is affected by tweaking
+the transition probability between entries.
+
+The database is a graph where each edge in a complete graph has 2 nodes
+inserted into every edge.
+
+The following landmarks in the thesis have been coded up
+
+ - Finding the Probabilistic Graph Laplacian, L
+ - Confirming that L is self-adjoint under the M-adjoint operator
+ - Calculating the success probability where the exponential is given by a Taylor series
+
+Run ./build.sh 1 to build executable to check that L is self-adjoing 
+Run ./build.sh 2 to build executable to calculate the success probability
