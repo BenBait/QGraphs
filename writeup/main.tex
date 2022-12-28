@@ -1,0 +1,73 @@
+\documentclass[12pt]{article}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{physics}
+\usepackage{float}
+\usepackage{mathtools}
+\usepackage{mathptmx}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{gensymb}
+\usepackage{comment}
+\usepackage[margin=1.125in, top=1.125in]{geometry}
+% This makes the toc include the bibliography
+\usepackage[nottoc,numbib]{tocbibind}
+% sets up 2 sided (from RIPS)
+\usepackage{ifthen, color, fancyvrb}
+\usepackage{nextpage}\pagestyle{plain}
+\newcommand\myclearpage{\cleartooddpage
+  [\thispagestyle{empty}]
+  }
+
+\graphicspath{{./}}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\M}{\mathcal{M}}
+\newcommand{\state}[1]{\vectorbold{|#1\rangle}}
+\newcommand{\neswarrow}{\mathrel{\text{$\nearrow$\llap{$\swarrow$}}}}
+\newcommand{\nwsearrow}{\mathrel{\text{$\nwarrow$\llap{$\searrow$}}}}
+\newcommand{\setF}[2]{#1 = \{#2_j \}_{j=1}^N \subseteq \C^d}
+
+\begin{document}
+
+\pagenumbering{roman}
+\input{sections/title}
+\pagebreak
+\tableofcontents
+\pagebreak
+
+\pagenumbering{arabic}
+
+\noindent
+TODO:\\
+ - Constructing segmented complete graph (using Strichartz notation) \\
+ - Proposition about the Hilbert space (that Laplacian is self-adjoint) \\
+ - Spectral analysis of this graph \\
+ - Hamiltonian of the segmented complete graph \\
+ - Spectral analysis of the Hamiltonian \\
+ - Numerical analysis \\
+
+\ifthenelse{\boolean{@twoside}}{\myclearpage}{}
+\input{sections/intro}
+
+\ifthenelse{\boolean{@twoside}}{\myclearpage}{}
+\input{sections/background}
+
+\ifthenelse{\boolean{@twoside}}{\myclearpage}{}
+\input{sections/eigenvalues_laplacian}
+
+\ifthenelse{\boolean{@twoside}}{\myclearpage}{}
+\input{sections/numerical}
+
+\bibliographystyle{siam} 
+\bibliography{sources.bib}
+
+\end{document}

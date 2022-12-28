@@ -35,7 +35,7 @@ int main (int argc, char *argv[]) {
     }
     // n in the adjacency matrix for the segmented matrix
     unsigned long n = n_complete*segs + num_inside*(segs - 1);
-    printf("n in semented graph: %ld\n", n);
+    printf("n in segmented graph: %ld\n", n);
 
     // original entries have (n_complete - 1) adjacencies, 
     // nodes in segments each have 2 adjacencies

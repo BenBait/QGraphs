@@ -1,0 +1,164 @@
+\section{Background Information}
+\begin{definition}[Complete Graph]
+A graph in which every node is connected to every other node.
+\end{definition}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5cm]{imgs/complete_graph.png}
+    \caption[Complete Graph]{A complete graph with 5 nodes}
+    \label{complete_graph}
+\end{figure}
+
+\begin{definition}[Segmented-Complete Graph]
+A graph that is constructed by inserting N nodes into every edge on a complete graph. 
+\end{definition}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5cm]{imgs/segmented_complete_graph.png}
+    \caption[Segmented Complete Graph]{A segmented complete graph with 25 nodes}
+    \label{segmented_complete_graph}
+\end{figure}
+All of the following defined matrices are $N$ x $N$ where $N$ is the number of entries in the segmented complete graph.
+\begin{definition}[Adjacency Matrix]
+A matrix whose entries indicate the connections between nodes; that is, entry
+$$
+(i, j) = \begin{cases}
+1, \text{if } \exists \text{ path between node i and j}\\
+0, \text{ otherwise.}
+\end{cases}
+$$
+\end{definition}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5cm]{imgs/adjacency_matrix.png}
+    \caption[Adjacency Matrix]{Segmented complete graph with a node $w$ labelled and it’s entry in the adjacency matrix highlighted}
+    \label{adjacency_matrix}
+\end{figure}
+\begin{definition}[Probabilistic Adjacency Matrix]
+Similar to the adjacency matrix, except the entries for connections are the transition probability between those nodes. That is, entry
+$$
+(i, j) = \begin{cases}
+p, \text{if } \exists \text{ path between node i and j}\\
+0, \text{ otherwise,}
+\end{cases}
+$$
+where p is the probability of traversing from node $i$ to $j$. 
+\end{definition}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5cm]{imgs/probabilistic_adjacency_matrix.png}
+    \caption[Adjacency Matrix]{Same graph as Figure \ref{adjacency_matrix} with transition probabilities shown between nodes, and corresponding entry highlighted in matrix}
+    \label{probabilistic_adjacency_matrix}
+\end{figure}
+\begin{definition}[Degree Matrix]
+A diagonal matrix where the entry in the $i$th row is the degree of node $i$.
+\end{definition}
+
+\begin{definition}[Laplacian Matrix]
+The Laplacian matrix is the Degree Matrix minus the Adjacency Matrix.
+\end{definition}
+
+\begin{definition}[Probabilistic Laplacian Matrix]
+The Probabilistic Laplacian matrix is the Degree Matrix minus the Probabilistic Adjacency Matrix.
+It is denoted $\Delta$.
+\end{definition}
+
+\begin{definition}[Oracle Matrix]
+The oracle matrix for the entry $w$ is all 0s except for the entry $(w, w)$, which is 1. 
+\end{definition}
+
+\begin{definition}[Graph Hamiltonian]
+The graph Hamiltonian is given by
+$$
+H = \gamma L – V_w
+$$
+where $\gamma$ is some tunable parameter, $w$ is the index of the node we are looking for, and $V_w$ is the oracle matrix.
+\end{definition}
+
+\begin{definition}[Time-Evolution Operator]
+The time evolution operator is given by
+$$
+U_t = exp(iHt).
+$$
+\end{definition}
+
+In quantum mechanics, all operators must be self-adjoint (or Hermitian). 
+If the Hilbert space is finite, as is the case for quantum computing and specifically the quantum walks of interest in this paper, then this means that $A$ is self-adjoint if $A=A^{\dag}$, where $A^{\dag}$ is just the conjugate transpose of $A$.
+
+It is natural to check if an operator is equal to its conjugate transpose under the standard basis. 
+However, we can instead define an inner product for our Hilbert space such that the graph probabilistic Laplacian is self-adjoint.
+Hence, we must take a step back and focus more on the inner product.
+\begin{definition}[$M$-Inner Product]
+Let $x, y \in \R^N$ and $M \in \R^{NxN}$, then the $M$-Inner Product is given by
+$$
+\langle x, y \rangle_M = x^TMy.
+$$
+\end{definition}
+The probabilistic Laplacian is in $\R^{N \cross N}$, hence, under the standard inner product, for some $x, y \in \R^N$ and $A \in \R^{N \cross N}$, the adjoint operator, $^{\dagger}$, is given by
+$$
+\langle x, Ay \rangle = \langle A^{\dagger}x, y \rangle.
+$$
+Under the $M$-Inner Product, 
+\begin{align*}
+\langle x, Ay \rangle_M &= x^TMAy\\
+&= x^TMAM^{-1}My\\
+&= \langle x, (MAM^{-1})y \rangle_M\\
+&= \langle (MAM^{-1})^{\dagger} x, y \rangle_M.
+\end{align*}
+\begin{definition}[$M$-Adjoint]
+The Adjoint operator under the $M$-Inner Product is given by
+$$
+A^{\ddag} = (MAM^{-1})^T
+$$
+\end{definition}
+Hence, given a probabilistic graph Laplacian, $\Delta$, we want to select $M$ such that
+$$
+\Delta^{\ddag} = (M\Delta M^{-1})^T = \Delta.
+$$
+In the case of the probabilistic graph Laplacian for the segmented-complete graph,
+it turns out that $M$ is given by a diagonal matrix, where the first $N_{complete}$ entries are given by $N_{complete} - 1$,
+where $N_{complete}$ is the number of nodes in the complete graph before segmentation (i.e. in Figure \ref{complete_graph}).
+The remaining $N_{complete} - N$ entries are given by $\frac{1}{p - 1}$, where $p$ is the transition probability between nodes.
+\begin{proposition}
+That is, for
+$$
+    M = \begin{bmatrix}
+        N_{complete} - 1 & 0 & 0 & 0 & 0 & ... & 0\\
+        0 & N_{complete} - 1 & 0 & 0 & 0 & ... & 0\\
+        \vdots\\
+        0 & ... & N_{complete} - 1   & 0 & 0 & ... & 0\\
+        0 & ... & 0 & \frac{1}{p-1} & 0 & 0 & ... & 0\\
+        0 & ... & 0 & 0 & \frac{1}{p-1} & 0 & ... & 0\\
+        \vdots\\
+        0 & ... & 0 & 0 & 0 & 0 & \frac{1}{p-1}
+    \end{bmatrix}
+$$
+and when $\Delta$ is the probabilistic graph Laplacian for the segmented-complete graph,
+$$
+\Delta^{\ddag} = (M\Delta M^{-1})^T = \Delta.
+$$
+\end{proposition}
+This can be numerically confirmed up to 300 nodes in the complete graph (before segmentation).
+
+\subsection{Calculating the Success Probability}
+It is common in quantum algorithms to start with a uniform superposition state of qubits.
+For graph traversals, we normalize with respect to the volume of the graph to achieve the uniform superposition state. 
+\begin{definition}[Graph Volume]
+The volume of a graph is given by
+$$
+Vol(G) = \sum_{x=0}^N<\delta_x, \delta_x>_M.
+$$
+\end{definition}
+\begin{definition}[Graph Uniform Superposition State]
+The uniform superposition state is given by
+$$
+s = \frac{1}{\sqrt{Vol(G)}}.
+$$
+\end{definition}
+\begin{definition}[Success Probability]
+The probability of finding entry $w$ at time $t$ is given by
+$$
+\pi_{\gamma}^w(t) = |<e_w, U_t s>_M|^2
+$$
+\end{definition}

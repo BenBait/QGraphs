@@ -1,0 +1,19 @@
+\section{Introduction}
+The maximum number of steps it takes on a classical computer to find a specific entry in some arbitrary database is equal to the number of entries in the database.
+On the other hand, we can induce a quadratic speedup on a quantum computer with Grover's Algorithm (1996).
+
+This thesis studies Grover's algorithm focusing on Childs-Goldstone's approach to continuous-time quantum walks on graphs \cite{ChildsGoldstone}.
+A graph models a database, and each entry corresponds to a node.
+The node corresponding to the specific entry we are searching for is denoted as the target node.
+To perform Grover's search in this context, Childs and Goldstone introduced a driving Hamiltonian operator on the graph that evolves a quantum walker into the target node.
+
+In \cite{extendChildsGoldstone}, the Childs-Goldstone approach is realized on databases with different topological arrangements.
+The underlying graphs were, for example, the dual Sierpinski graph or hierarchical structures like Cayley trees.
+All these works illustrate a dependency of Grover's algorithm on the topological structure of these graphs.
+
+This thesis investigates an approach introduced in \cite{MograbyEtAl}.
+Instead of finding convenient graph topologies (i.e., to find the target faster) for a quantum walker, we fix the graph topology and vary the transition probabilities between adjacent nodes.
+The primary focus of the thesis is to conduct numerical experiments to determine the optimal transition probability between specific nodes, which might lead to an improvement of Grover's algorithm on graphs. 
+
+The thesis begins by introducing some definitions relevant to spectral graph-theory, as well as relevant definitions and notation for quantum walks on graphs.
+OUTLINE LATER SECTIONS AS THEY ARE INTRODUCED INTO THE THESIS.

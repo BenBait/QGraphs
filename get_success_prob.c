@@ -18,8 +18,12 @@ T get_success_probability (cs *A, // adjacency matrix for segmented graph
 // helper function to test with the identity matrix
 cs *get_diag (int n, int diag);
 
-int main (int argc, char *argv[]) {
+// helper function computes exponential of Hamiltonian with a Taylor expansion
+T *get_exp_H (cs *H, int num_H_entries, int n, int Pr);
+T *diag_get_exp_H (cs *H, int num_H_entries, int n, int Pr);
 
+int main (int argc, char *argv[])
+{
     // n_complete is the number of nodes before segmentation
     if (argc < 5) {
         fprintf(stderr, "PASS 5 ARGUMENTS: n, p, gamma, w, and Print(0 or 1)\n"); 
@@ -69,16 +73,6 @@ int main (int argc, char *argv[]) {
     get_success_probability(A, num_entries, n_complete, n, w, p, gamma, t, Pr);
     return 0;
 
-    // factor that normalizes the dirac delta can be calculated as follows
-    /*
-    T *f = calloc(n, sizeof(T));
-    T *g = calloc(n, sizeof(T));
-    f[w] = 1.0;
-    g[w] = 1.0;
-    T norm_factor = herm_inner_prod(f, g, n, n_complete, p);
-    free(f);
-    free(g);
-    */
 }
 
 T get_success_probability (cs *A,
@@ -106,18 +100,11 @@ T get_success_probability (cs *A,
     // NOTE: Hamiltoian has 1 less entry once oracle matrix is subtracted
     // multiply every entry in the Hamiltonian by i and the time
     // before taking the exponential
-    double complex a = 0.0+1.0*img;
-    double complex b = 1.0+0.0*img;
-    //double complex prodab = a*b;
-    printf("mat_val: %f + i*%f\n", creal(H->x[0]), cimag(H->x[0]));
-    printf("PRINTING MAT\n");
-    for (int i = 0; i < num_H_entries; i++) {
-        //H->x[i] *= just_i*t;
-        double complex prod = a*H->x[i];
-        printf("prod: %f + i*%f\n", creal(prod), cimag(prod));
-        //H->x[i] = a*H->x[i];
-        H->x[i] = prod;
-        printf("mat_val: %f + i*%f\n", creal(H->x[i]), cimag(H->x[i]));
+    //T img = 0.0+1.0*img;
+    int i;
+    // multiply every entry by sqrt(-1)
+    for (i = 0; i < num_H_entries; i++) {
+        H->x[i] = img * H->x[i];
     }
 
     if (Pr) {
@@ -125,32 +112,18 @@ T get_success_probability (cs *A,
         print_dense(H, num_H_entries, n);
     }
 
+    // need to replace this with a diagonalization technique
+    T *exp_H = get_exp_H (H, num_H_entries, n, Pr);
+
     // we already know what norm_factor is, see bottom of this function to see
     // how it is calculated
     double M_high = (double)n_complete - 1;
     double M_low = 1 / (1.0 - p);
 
     T norm_factor = (w < n_complete) ? M_high : M_low;
-    printf("Herm Inner Prod : %f + i*%f\n", creal(norm_factor), cimag(norm_factor));
+    printf("Herm Inner Prod : %f + i*%f\n",
+            creal(norm_factor), cimag(norm_factor));
 
-    T k_fact = 2;
-    T *prod = sq_scale_and_addI_dense (H, num_H_entries, n, k_fact);
-    T *H_dense = get_dense(H, num_H_entries, n);
-    T *exp_H = calloc(n*n, sizeof(T));
-    add_mat(exp_H, prod, n);
-
-    int accuracy = 3;
-    int i;
-    for (i = 0; i < accuracy; i++) {
-        k_fact *= k_fact+1;
-        T *next_prod = mult_dense_from_dense (prod, H_dense, n, k_fact);
-        add_mat(exp_H, next_prod, n);
-        prod = next_prod;
-    }
-    if (Pr) {
-        printf("exp(H):\n");
-        print_dense_from_dense(exp_H, n);
-    }
     T *s   = calloc(n, sizeof(T));
     T *e_w = calloc(n, sizeof(T));
     e_w[w] = 1 / norm_factor;
@@ -158,10 +131,16 @@ T get_success_probability (cs *A,
     for (i = 0; i < n; i++) {
         s[i] = 1.0 / sqrt(vol);
     }
-    T *exp_H_s = multiply_mat_vec(exp_H, s, n);
-    T success_prob = herm_inner_prod(e_w, exp_H_s, n, n_complete, p);
+    // multiply H by the uniform distribution state
+    T *exp_H_s = multiply_mat_vec (exp_H, s, n);
+    // std basis state inner prod exp(H_s)
+    T std_prod_exp      = herm_inner_prod (e_w, exp_H_s, n, n_complete, p);
+    // no need for conjugate because we just get the square of the norm
+    double real_part    = creal(std_prod_exp) * creal(std_prod_exp);
+    double imag_part    = cimag(std_prod_exp) * cimag(std_prod_exp);
+    double success_prob = real_part + imag_part;
 
-    printf("\nSuccess Prob: %f + i*%f\n", creal(success_prob), cimag(success_prob));
+    printf("\nSuccess Prob: %f\n", success_prob);
 
     free(A->i);
     free(A->p);
@@ -175,6 +154,16 @@ T get_success_probability (cs *A,
 
     free(s);
     free(e_w);
+    // factor that normalizes the dirac delta can be calculated as follows
+    /*
+    T *f = calloc(n, sizeof(T));
+    T *g = calloc(n, sizeof(T));
+    f[w] = 1.0;
+    g[w] = 1.0;
+    T norm_factor = herm_inner_prod(f, g, n, n_complete, p);
+    free(f);
+    free(g);
+    */
 }
 
 cs *get_diag (int n, int diag)
@@ -199,4 +188,50 @@ cs *get_diag (int n, int diag)
         cs_push(A, j, j, diag, &id);
     }
     return A;
+}
+
+/* this method of getting the exponential of H is with a diagonalization */
+T *diag_get_exp_H (cs *H,
+                  int num_H_entries,
+                  int n,
+                  int Pr)
+{
+    T *H_dense = get_dense (H, num_H_entries, n);
+    T *exp_H = calloc (n*n, sizeof(T));
+
+    if (Pr) {
+        printf ("exp(H):\n");
+        print_dense_from_dense (exp_H, n);
+    }
+
+    return exp_H;
+}
+/* this method of getting the exponential of H is with a Taylor expansion */
+T *get_exp_H (cs *H,
+              int num_H_entries,
+              int n,
+              int Pr)
+{
+    // k_fact is denominator in taylor expansion
+    T k_fact = 2;
+    // prod is numerator in taylor expansion
+    T *prod = sq_scale_and_addI_dense (H, num_H_entries, n, k_fact);
+    T *H_dense = get_dense(H, num_H_entries, n);
+    T *exp_H = calloc(n*n, sizeof(T));
+    add_mat(exp_H, prod, n);
+
+    int accuracy = 3;
+    int i;
+    for (i = 0; i < accuracy; i++) {
+        k_fact *= k_fact+1;
+        T *next_prod = mult_dense_from_dense (prod, H_dense, n, k_fact);
+        add_mat (exp_H, next_prod, n);
+        prod = next_prod;
+    }
+    if (Pr) {
+        printf("exp(H):\n");
+        print_dense_from_dense(exp_H, n);
+    }
+
+    return exp_H;
 }

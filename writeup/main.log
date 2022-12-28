@@ -1,0 +1,568 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdftex 2021.12.10)  27 DEC 2022 20:35
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**main.tex
+(./main.tex
+! Undefined control sequence.
+l.1 \documentclass
+                  [12pt]{article}
+? 
+! Undefined control sequence.
+l.2 \usepackage
+               [english]{babel}
+? 
+! Undefined control sequence.
+l.3 \usepackage
+               [utf8]{inputenc}
+? 
+! Undefined control sequence.
+l.4 \usepackage
+               {amsfonts}
+? 
+! Undefined control sequence.
+l.5 \usepackage
+               {graphicx}
+? 
+! Undefined control sequence.
+l.6 \usepackage
+               {physics}
+? 
+! Undefined control sequence.
+l.7 \usepackage
+               {float}
+? 
+! Undefined control sequence.
+l.8 \usepackage
+               {mathtools}
+? 
+! Undefined control sequence.
+l.9 \usepackage
+               {mathptmx}
+? 
+! Undefined control sequence.
+l.10 \usepackage
+                {amsmath,amssymb,amsthm}
+? 
+! Undefined control sequence.
+l.11 \usepackage
+                {gensymb}
+? 
+! Undefined control sequence.
+l.12 \usepackage
+                {comment}
+? 
+! Undefined control sequence.
+l.13 \usepackage
+                [margin=1.125in, top=1.125in]{geometry}
+? 
+! Undefined control sequence.
+l.15 \usepackage
+                [nottoc,numbib]{tocbibind}
+? 
+! Undefined control sequence.
+l.17 \usepackage
+                {ifthen, color, fancyvrb}
+? 
+! Undefined control sequence.
+l.18 \usepackage
+                {nextpage}\pagestyle{plain}
+? 
+! Undefined control sequence.
+l.18 \usepackage{nextpage}\pagestyle
+                                    {plain}
+? 
+! Undefined control sequence.
+l.19 \newcommand
+                \myclearpage{\cleartooddpage
+? 
+! Undefined control sequence.
+l.19 \newcommand\myclearpage
+                            {\cleartooddpage
+? 
+! Undefined control sequence.
+l.19 \newcommand\myclearpage{\cleartooddpage
+                                            
+? 
+! Undefined control sequence.
+l.20   [\thispagestyle
+                      {empty}]
+? 
+
+Overfull \hbox (4.6351pt too wide) in paragraph at lines 1--22
+\tenrm math,amssymb,amsthm gen-symb com-ment [mar-gin=1.125in, top=1.125in]geom
+etry [not-toc,numbib]tocbibind|
+
+\hbox(7.5+2.5)x469.75499, glue set - 1.0
+.\tenrm m
+.\tenrm a
+.\tenrm t
+.\tenrm h
+.\tenrm ,
+.etc.
+
+! Undefined control sequence.
+l.23 \graphicspath
+                  {{./}}
+? 
+! Undefined control sequence.
+l.25 \newtheorem
+                {theorem}{Theorem}[section]
+? 
+! Undefined control sequence.
+l.26 \newtheorem
+                {lemma}[theorem]{Lemma}
+? 
+! Undefined control sequence.
+l.27 \newtheorem
+                {corollary}[theorem]{Corollary}
+? 
+! Undefined control sequence.
+l.28 \theoremstyle
+                  {definition}
+? 
+! Undefined control sequence.
+l.29 \newtheorem
+                {definition}{Definition}[section]
+? 
+! Undefined control sequence.
+l.31 \newcommand
+                {\C}{\mathbb{C}}
+? 
+! Undefined control sequence.
+l.31 \newcommand{\C
+                   }{\mathbb{C}}
+? 
+! Undefined control sequence.
+l.31 \newcommand{\C}{\mathbb
+                            {C}}
+? 
+! Undefined control sequence.
+l.32 \newcommand
+                {\R}{\mathbb{R}}
+? 
+! Undefined control sequence.
+l.32 \newcommand{\R
+                   }{\mathbb{R}}
+? 
+! Undefined control sequence.
+l.32 \newcommand{\R}{\mathbb
+                            {R}}
+? 
+! Undefined control sequence.
+l.33 \newcommand
+                {\M}{\mathcal{M}}
+? 
+! Undefined control sequence.
+l.33 \newcommand{\M
+                   }{\mathcal{M}}
+? 
+! Undefined control sequence.
+l.33 \newcommand{\M}{\mathcal
+                             {M}}
+? 
+! Undefined control sequence.
+l.34 \newcommand
+                {\state}[1]{\vectorbold{|#1\rangle}}
+? 
+! Undefined control sequence.
+l.34 \newcommand{\state
+                       }[1]{\vectorbold{|#1\rangle}}
+? 
+! Undefined control sequence.
+l.34 \newcommand{\state}[1]{\vectorbold
+                                       {|#1\rangle}}
+? 
+! You can't use `macro parameter character #' in horizontal mode.
+l.34 \newcommand{\state}[1]{\vectorbold{|#
+                                          1\rangle}}
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+<to be read again> 
+                   \delimiter 
+\rangle ->\delimiter 
+                     "526930B 
+l.34 \newcommand{\state}[1]{\vectorbold{|#1\rangle
+                                                  }}
+? 
+! Extra }, or forgotten $.
+l.34 ...command{\state}[1]{\vectorbold{|#1\rangle}
+                                                  }
+? 
+! Extra }, or forgotten $.
+l.34 ...ommand{\state}[1]{\vectorbold{|#1\rangle}}
+                                                  
+? 
+! Undefined control sequence.
+l.35 \newcommand
+                {\neswarrow}{\mathrel{\text{$\nearrow$\llap{$\swarrow$}}}}
+? 
+! Undefined control sequence.
+l.35 \newcommand{\neswarrow
+                           }{\mathrel{\text{$\nearrow$\llap{$\swarrow$}}}}
+? 
+! Undefined control sequence.
+l.35 \newcommand{\neswarrow}{\mathrel{\text
+                                           {$\nearrow$\llap{$\swarrow$}}}}
+? 
+! Missing } inserted.
+<inserted text> 
+                }
+<to be read again> 
+                   $
+l.35 \newcommand{\neswarrow}{\mathrel{\text{$
+                                             \nearrow$\llap{$\swarrow$}}}}
+? 
+! Missing } inserted.
+<inserted text> 
+                }
+<to be read again> 
+                   $
+l.35 \newcommand{\neswarrow}{\mathrel{\text{$
+                                             \nearrow$\llap{$\swarrow$}}}}
+? 
+! Missing } inserted.
+<inserted text> 
+                }
+<to be read again> 
+                   $
+l.35 \newcommand{\neswarrow}{\mathrel{\text{$
+                                             \nearrow$\llap{$\swarrow$}}}}
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+<to be read again> 
+                   \nearrow 
+l.35 ...mmand{\neswarrow}{\mathrel{\text{$\nearrow
+                                                  $\llap{$\swarrow$}}}}
+? 
+! Too many }'s.
+l.35 ...threl{\text{$\nearrow$\llap{$\swarrow$}}}}
+                                                  
+? 
+! Undefined control sequence.
+l.36 \newcommand
+                {\nwsearrow}{\mathrel{\text{$\nwarrow$\llap{$\searrow$}}}}
+? 
+! Undefined control sequence.
+l.36 \newcommand{\nwsearrow
+                           }{\mathrel{\text{$\nwarrow$\llap{$\searrow$}}}}
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+<to be read again> 
+                   \mathrel 
+l.36 \newcommand{\nwsearrow}{\mathrel
+                                     {\text{$\nwarrow$\llap{$\searrow$}}}}
+? 
+! Undefined control sequence.
+l.36 \newcommand{\nwsearrow}{\mathrel{\text
+                                           {$\nwarrow$\llap{$\searrow$}}}}
+? 
+! Missing } inserted.
+<inserted text> 
+                }
+<to be read again> 
+                   $
+l.36 \newcommand{\nwsearrow}{\mathrel{\text{$
+                                             \nwarrow$\llap{$\searrow$}}}}
+? 
+! Missing } inserted.
+<inserted text> 
+                }
+<to be read again> 
+                   $
+l.36 \newcommand{\nwsearrow}{\mathrel{\text{$
+                                             \nwarrow$\llap{$\searrow$}}}}
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+<to be read again> 
+                   \nwarrow 
+l.36 ...mmand{\nwsearrow}{\mathrel{\text{$\nwarrow
+                                                  $\llap{$\searrow$}}}}
+? 
+! Too many }'s.
+l.36 ...athrel{\text{$\nwarrow$\llap{$\searrow$}}}
+                                                  }
+? 
+! Too many }'s.
+l.36 ...threl{\text{$\nwarrow$\llap{$\searrow$}}}}
+                                                  
+? 
+! Undefined control sequence.
+l.37 \newcommand
+                {\setF}[2]{#1 = \{#2_j \}_{j=1}^N \subseteq \C^d}
+? 
+! Undefined control sequence.
+l.37 \newcommand{\setF
+                      }[2]{#1 = \{#2_j \}_{j=1}^N \subseteq \C^d}
+? 
+! You can't use `macro parameter character #' in horizontal mode.
+l.37 \newcommand{\setF}[2]{#
+                            1 = \{#2_j \}_{j=1}^N \subseteq \C^d}
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+<to be read again> 
+                   \delimiter 
+\{->\delimiter 
+               "4266308 
+l.37 \newcommand{\setF}[2]{#1 = \{
+                                  #2_j \}_{j=1}^N \subseteq \C^d}
+? 
+! You can't use `macro parameter character #' in math mode.
+l.37 \newcommand{\setF}[2]{#1 = \{#
+                                   2_j \}_{j=1}^N \subseteq \C^d}
+? 
+! Undefined control sequence.
+l.37 ...tF}[2]{#1 = \{#2_j \}_{j=1}^N \subseteq \C
+                                                  ^d}
+? 
+! Extra }, or forgotten $.
+l.37 ...[2]{#1 = \{#2_j \}_{j=1}^N \subseteq \C^d}
+                                                  
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+<to be read again> 
+                   \par 
+l.38 
+     
+? 
+! Undefined control sequence.
+l.39 \begin
+           {document}
+? 
+! Undefined control sequence.
+l.41 \pagenumbering
+                   {roman}
+? 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! I can't find file `{sections/title}'.
+l.42 \input{sections/title}
+                           
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name: 
+! Emergency stop.
+l.42 \input{sections/title}
+                           
+End of file on the terminal!
+
+!  ==> Fatal error occurred, no output PDF file produced!

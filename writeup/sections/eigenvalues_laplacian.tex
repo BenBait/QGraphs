@@ -1,0 +1,87 @@
+\section{Eigenvalues of the Probabilistic Graph Laplacian}
+The following definition is from \cite{SelfSimilarity}.
+\begin{definition}[Spectrally Similar]
+$L$ is spectrally similar to $L_0$ with functions $\phi_0$ and $\phi_1$ if
+$$
+U^*(L - z)^{-1}U = (\phi_0(z)H_0-\phi_1(z))^{-1}
+$$
+
+\end{definition}
+
+If $\phi_0 \neq 0$ and we let $R(z) = \phi_1(z) / \phi_0(z)$, then 
+$$
+U^*(L - z)^{-1}U = (\phi_0(H_0-R(z)))^{-1}.
+$$
+Notice that the left hand side is conjugation of $L - z$, which we call the \textit{resolvent operator}, that results in an embedding of $L - z$ in a space of the same size as $L_0$.
+
+This form will be help us make a connection to the Schur Complement that is defined below.
+
+The segmented-complete graph is spectrally similar to the complete graph.
+We can use this fact to leverage the work from \cite{VibrationModes} to find eigenvectors for the graph Hamiltonian.
+
+Starting with the Laplacian of the complete graph, $L_0$, if the Laplacian of the segmented-complete graph is spectrally similar, we can write it as
+$$
+L = \begin{bmatrix}
+L_0 & B \\
+C   & D
+\end{bmatrix}.
+$$
+
+\begin{definition}[Schur Complement]
+The Schur complement, $L'$, is given by
+$$
+L' = L_0 - BD^{-1}C.
+$$
+\end{definition}
+
+To help find the eigenvectors of the segmented-complete graph, it is useful to define the Schur complement of the resolvent operator or $L$:
+$$
+S(z) := L_0 - z - B(D-z)^{-1}C.
+$$
+
+If we let $v_0$ be the eigenvector of the complete graph, and $v_1$ be the eigenvector of the newly introduced nodes in the segmented-complete graph, then we can solve the eigenvalue equation
+$$
+Lv = zv;
+$$
+or if we expand and apply the rules of block-matrix multiplication, we solve
+$$
+L_0v_0 + Bv_1 = zv_0
+Cv_0 + Dv_1 = zv_1.
+$$
+Solving for $v_1$ and assuming that $z$ is not in the spectrum of $D$, we find that
+$$
+v_1= -(D - z)^{-1}Cv_0,
+$$
+which means that $S(z)v_0=0$.
+We can relate this with the eigenvalue equation of $L_0$,
+$$
+(L_0 - z_0)v_0 = 0,
+$$
+then let $z_0 = R(z)$, and write
+$$
+S(z) = \phi(z)(L_0 - R(z)).
+$$
+Notice that if we use the nonzero $\phi_0$ from the definition of spectrally similar and let $\phi = \phi_0$, then we can write
+$$
+U^*(L - z)^{-1}U = \frac{1}{S(z)}
+$$
+
+The following theorem from \cite{VibrationModes} helps explicitly write the eigenvectors for the segmented-complete graph's Laplacian:
+\begin{theorem}
+Suppose that z is not an eigenvalue of D, and not a zero of $\phi$.
+Then z is an eigenvalue of M with an eigenvector v if and only if R(z) is an eigenvalue of $M_0$ with an eigenvector $v_0$, and $v = \begin{bmatrix} v_0\\ v'\end{bmatrix}$ where 
+$$
+v' = -(D - z)^{-1}Cv_0.
+$$
+This implies that there is a one-to-one map from the eigenspace of $M_0$ corresponding to $R(z)$ onto the eigenspace of $M$ corresponding to $z$
+$$
+v_0 \rightarrow v = T(z)v_0
+$$
+where $T(z)$ is called the eigenfunction extension matrix and is given by
+$$
+T(z) = \begin{bmatrix}
+    I_0\\
+    -(D - z)^{-1}C
+\end{bmatrix}
+$$
+\end{theorem}

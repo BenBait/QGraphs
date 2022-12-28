@@ -4,25 +4,24 @@
 #include<stdio.h>
 #include<complex.h>
 
-// use img for sqrt(-1)
+#ifdef I
 #undef I
 #define img _Complex_I
-//typedef struct complex{
-//}complex
-//printf("%.2f+i*%0.2f\t", full[full_id].real, full[full_id].imag);
+#endif
 
 #define NZMAX 10000
+//typedef double complex T;
 typedef double complex T;
 
 typedef struct cs_sparse    /* matrix in compressed-column or triplet form */
 {
     int nzmax ;	    /* maximum number of entries */
+    int nz ;	    /* # of entries */
     int m ;	        /* number of rows */
     int n ;	        /* number of columns */
-    int *p ;	    /* column pointers (size n+1) or col indices (size nzmax) */
-    int *i ;	    /* row indices, size nzmax */
+    int *p ;	    /* column indices */
+    int *i ;	    /* row indices */
     T *x ;	        /* numerical values, size nzmax */
-    int nz ;	    /* # of entries in triplet matrix, -1 for compressed-col */
 } cs ;
 
 void cs_push (cs *A, int r, int c, double val, int *idy);
@@ -192,7 +191,10 @@ void print_dense_from_dense (T *full,
     for (r = 0; r < n; r++) {
         for (c = 0; c < n; c++) {
             full_id = c + r*n;
-            printf("%.2f+i*%0.2f\t", creal(full[full_id]), cimag(full[full_id]));
+            if (cimag(full[full_id]) != 0)
+                printf("%.2f+i*%0.2f\t", creal(full[full_id]), cimag(full[full_id]));
+            else
+                printf("%.2f\t", creal(full[full_id]));
             /*
             if (fabs(full[full_id]) < 0.0000000001)
                 printf("%d\t", 0);
@@ -244,7 +246,10 @@ void print_dense(cs *A,
     for (r = 0; r < n; r++) {
         for (c = 0; c < n; c++) {
             full_id = c + r*n;
-            printf("%.2f+i*%0.2f\t", creal(full[full_id]), cimag(full[full_id]));
+            if (cimag(full[full_id]) != 0)
+                printf("%.2f+i*%0.2f\t", creal(full[full_id]), cimag(full[full_id]));
+            else
+                printf("%.2f\t", creal(full[full_id]));
             /*
             if (fabs(full[full_id]) < 0.0000000001)
                 printf("%d\t", 0);
