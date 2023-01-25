@@ -24,10 +24,6 @@ typedef struct cs_sparse    /* matrix in compressed-column or triplet form */
     T *x ;	        /* numerical values, size nzmax */
 } cs ;
 
-void cs_push (cs *A, int r, int c, double val, int *idy);
-cs *transpose(cs *A);
-void print_dense (cs *A, int num_entries, unsigned long n);
-
 void cs_push (cs *A, int r, int c, double val, int *idy)
 {
     int id = *idy;
@@ -133,6 +129,7 @@ void multiply_M_mat(cs *A,
 }
 
 // helper transpose function used in calculating dagger
+// this function copies the transpose of A in a different matrix
 cs *transpose(cs *A) 
 {
     cs *L = malloc(sizeof(cs));
@@ -182,32 +179,7 @@ cs *dagger(cs *L, unsigned long n, int n_complete, T p)
     return L_dag;
 }
 
-void print_dense_from_dense (T *full,
-                             unsigned long n)
-{
-    int r, c;
-    int full_id;
-
-    for (r = 0; r < n; r++) {
-        for (c = 0; c < n; c++) {
-            full_id = c + r*n;
-            if (cimag(full[full_id]) != 0)
-                printf("%.2f+i*%0.2f\t", creal(full[full_id]), cimag(full[full_id]));
-            else
-                printf("%.2f\t", creal(full[full_id]));
-            /*
-            if (fabs(full[full_id]) < 0.0000000001)
-                printf("%d\t", 0);
-            else
-                printf("%.2f+i*%0.2f\t", creal(full[full_id]), cimag(full[full_id]));
-                */
-        }
-        printf("\n");
-    }
-
-    free(full);
-}
-
+// turn a sparse matrix into a full matrix
 T *get_dense(cs *A,
              int num_entries,
              unsigned long n)
@@ -229,38 +201,6 @@ T *get_dense(cs *A,
     }
 
     return full;
-}
-
-void print_dense(cs *A,
-                 int num_entries,
-                 unsigned long n)
-{
-    //T *full = calloc(n*n, sizeof(T));
-
-    int r, c;
-    T val;
-    int full_id;
-
-    T *full = get_dense(A, num_entries, n);
-
-    for (r = 0; r < n; r++) {
-        for (c = 0; c < n; c++) {
-            full_id = c + r*n;
-            if (cimag(full[full_id]) != 0)
-                printf("%.2f+i*%0.2f\t", creal(full[full_id]), cimag(full[full_id]));
-            else
-                printf("%.2f\t", creal(full[full_id]));
-            /*
-            if (fabs(full[full_id]) < 0.0000000001)
-                printf("%d\t", 0);
-            else
-                printf("%.2f+i*%0.2f\t", creal(full[full_id]), cimag(full[full_id]));
-                */
-        }
-        printf("\n");
-    }
-
-    free(full);
 }
 
 T *sq_scale_and_addI_dense (cs *A,
@@ -361,4 +301,78 @@ void add_mat(T *A, T* B, unsigned long n) {
         A[i] += B[i];
     }
 }
+
+void print_dense_from_dense (T *full,
+                             unsigned long n)
+{
+    int r, c;
+    int full_id;
+
+    for (r = 0; r < n; r++) {
+        for (c = 0; c < n; c++) {
+            full_id = c + r*n;
+            if (cimag(full[full_id]) != 0)
+                printf("%.2f+i*%0.2f\t", creal(full[full_id]), cimag(full[full_id]));
+            else
+                printf("%.2f\t", creal(full[full_id]));
+        }
+        printf("\n");
+    }
+}
+
+void fprint_dense(const char file_loc[],
+                  cs *A,
+                  int num_entries,
+                  unsigned long n)
+{
+    int r, c;
+    T val;
+    int full_id;
+
+    T *full = get_dense(A, num_entries, n);
+
+    FILE *F = fopen(file_loc, "w");
+    for (r = 0; r < n; r++) {
+        for (c = 0; c < n-1; c++) {
+            full_id = c + r*n;
+            if (cimag(full[full_id]) != 0)
+                fprintf(F, "%.2f+i*%0.2f\t", creal(full[full_id]), cimag(full[full_id]));
+            else
+                fprintf(F, "%.2f\t", creal(full[full_id]));
+        }
+        // don't print the tab for the last character, just newline
+        full_id = (n-1) + r*n;
+        if (cimag(full[full_id]) != 0)
+            fprintf(F, "%.2f+i*%0.2f\n", creal(full[full_id]), cimag(full[full_id]));
+        else
+            fprintf(F, "%.2f\n", creal(full[full_id]));
+    }
+
+    free(full);
+}
+
+void print_dense(cs *A,
+                 int num_entries,
+                 unsigned long n)
+{
+    int r, c;
+    T val;
+    int full_id;
+
+    T *full = get_dense(A, num_entries, n);
+
+    for (r = 0; r < n; r++) {
+        for (c = 0; c < n; c++) {
+            full_id = c + r*n;
+            if (cimag(full[full_id]) != 0)
+                printf("%.2f+i*%0.2f\t", creal(full[full_id]), cimag(full[full_id]));
+            else
+                printf("%.2f\t", creal(full[full_id]));
+        }
+        printf("\n");
+    }
+
+    free(full);
+}
+
 #endif

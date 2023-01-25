@@ -12,8 +12,10 @@ T get_success_probability (cs *A, // adjacency matrix for segmented graph
                            unsigned long n, // nodes in segmented graph
                            int w,   // target node
                            T p,     // segmented edge node transition probability
-                           int t, // time value to checkout
-                           double gamma); // gamma coefficient
+                           int t_max, // maximum time value to checkout
+                           double gamma_max, // maximum gamma coefficient
+                           double gamma_step, // step size for iterating  gamma
+                           int Pr);
 
 // helper function to test with the identity matrix
 cs *get_diag (int n, int diag);
@@ -26,7 +28,8 @@ int main (int argc, char *argv[])
 {
     // n_complete is the number of nodes before segmentation
     if (argc < 5) {
-        const char *err_message = "PASS 5 ARGUMENTS: n, p, w, t, gamma\n";
+        const char *err_message = "PASS 7 ARGUMENTS: n, p, w, t_max, gamma_max,\
+ gamma_step, and Print(0 or 1)\n";
         fprintf(stderr, "%s", err_message); 
         exit(1);
     }
@@ -37,10 +40,14 @@ int main (int argc, char *argv[])
     T p = atof(argv[2]);
     // index we are searching for
     int w = atoi(argv[3]);
-    // time value
-    int t = atoi(argv[4]);
+    // maximum value of the time steps
+    int t_max = atoi(argv[4]);
     // gamma scale factor of Laplacian for the Hamiltionian
-    double gamma= atof(argv[5]);
+    double gamma_max = atof(argv[5]);
+    // step size as we step through the gamma values (up to gamma_max)
+    double gamma_step = atof(argv[6]);
+    // if Pr, print
+    int Pr = atoi(argv[7]);
     // segs in the number of segments in each edge after decomposing
     int segs = 3;
 
@@ -64,7 +71,8 @@ int main (int argc, char *argv[])
 
     cs *A = get_segmented_complete(num_entries, n, n_complete, p, segs);
 
-    get_success_probability(A, num_entries, n_complete, n, w, p, t, gamma);
+    get_success_probability(A, num_entries, n_complete, n, w, p,
+                            t_max, gamma_max, gamma_step, Pr);
     return 0;
 
 }
@@ -75,10 +83,14 @@ T get_success_probability (cs *A,
                            unsigned long n, // nodes in segmented graph
                            int w,   // target node
                            T p,     // segmented edge node transition probability
-                           int t, // maximum time value to checkout
-                           double gamma) // gamma coefficient
+                           int t_max, // maximum time value to checkout
+                           double gamma_max, // maximum gamma coefficient
+                           double gamma_step, // step size for iterating  gamma
+                           int Pr) 
 {
     int i; // general iterator
+    int t; // iterator for the time variation
+    double gamma; // iterator for gamma
 
     // entries in the Hamiltionian is equal to entries in the adjacecncy matrix
     // plus the diagonal (which is all 0 in A);
@@ -106,40 +118,48 @@ T get_success_probability (cs *A,
     for (i = 0; i < n; i++)
         s[i] = 1.0 / sqrt(vol);
 
-    cs *L = get_laplacian(A, num_H_entries, n);
-    fprint_dense("laplacian.matrix", L, num_H_entries, n);
+    FILE *F = fopen("success_prob.dat", "w");
     // iterate through the variation term in Hamiltonian
-    cs *H = get_hamiltonian(A, n, w, (T)gamma);
-    fprint_dense("hamiltonian.matrix", H, num_H_entries, n);
-    //printf("eigenvectors of the Hamiltonian:\t\n"
-    T scale = img*(T)t;
+    for (gamma = 1; gamma < gamma_max; gamma += gamma_step){
+        // iterate through the desired time range
+        cs *H = get_hamiltonian(A, n, w, (T)gamma);
+        for (t = 1; t < t_max; t++) { // time for exp(iHt) calculation 
+            // multiply every entry by sqrt(-1) and the current time
+            // we are saving space and memory accesses by doing the
+            // calculation in place
+            T scale;
+            if (t == 1)
+                scale = img*(T)t;
+            else
+                scale = (T)t / (T)(t - 1);
 
-    for (i = 0; i < num_H_entries; i++)
-        H->x[i] = H->x[i] * scale;
+            for (i = 0; i < num_H_entries; i++)
+                H->x[i] = H->x[i] * scale;
+             
+            // need to replace this with a diagonalization technique
+            //T *exp_H = get_exp_H (H, num_H_entries, n, Pr);
+            // use an external library first to get something to compare to
+            // Gamal's results in python
+            T *exp_H = c8mat_expm1(n, get_dense(H, num_H_entries, n));
 
-    // need to replace this with a diagonalization technique
-    //T *exp_H = get_exp_H (H, num_H_entries, n, Pr);
-    // use an external library first to get something to compare to
-    // Gamal's results in python
-    T *exp_H = c8mat_expm1(n, get_dense(H, num_H_entries, n));
+            // multiply H by the uniform distribution state
+            T *exp_H_s = multiply_mat_vec (exp_H, s, n);
+            // std basis state inner prod exp(H_s)
+            T std_prod_exp = herm_inner_prod (e_w, exp_H_s, n, n_complete, p);
+            // no need for conjugate because we just get the square of the norm
+            double real_part = creal(std_prod_exp) * creal(std_prod_exp);
+            double imag_part = cimag(std_prod_exp) * cimag(std_prod_exp);
+            double success_prob = real_part + imag_part;
+            // instead of printing it, write it to a file with the time
+            fprintf(F, "%d, %f, %f\n", t, gamma, success_prob);
+        }
 
-    // multiply H by the uniform distribution state
-    T *exp_H_s = multiply_mat_vec (exp_H, s, n);
-    // std basis state inner prod exp(H_s)
-    T std_prod_exp = herm_inner_prod (e_w, exp_H_s, n, n_complete, p);
-    // no need for conjugate because we just get the square of the norm
-    double real_part = creal(std_prod_exp) * creal(std_prod_exp);
-    double imag_part = cimag(std_prod_exp) * cimag(std_prod_exp);
-    double success_prob = real_part + imag_part;
-    // instead of printing it, write it to a file with the time
-    FILE *F = fopen("single_success_prob.dat", "w");
-    fprintf(F, "%d, %f, %f\n", t, gamma, success_prob);
-    fclose(F);
+        free(H->i);
+        free(H->p);
+        free(H->x);
+        free(H);
+    }
 
-    free(H->i);
-    free(H->p);
-    free(H->x);
-    free(H);
 
     free(A->i);
     free(A->p);

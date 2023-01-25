@@ -1,7 +1,7 @@
 #ifndef L_HELP
 #define L_HELP
 /*
- * header file with functions to generate matrices 
+ * header file with functions to generate laplacian and hamiltonian matrices 
  * A is always the adjacency matrix
  */
 #include<math.h>
@@ -304,5 +304,4 @@ cs *get_hamiltonian (cs *A, int n, int w, T gamma)
     free(d);
     return L;
 }
-
 #endif

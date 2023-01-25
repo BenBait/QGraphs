@@ -11,7 +11,25 @@ The following landmarks in the thesis have been coded up
 
  - Finding the Probabilistic Graph Laplacian, L
  - Confirming that L is self-adjoint under the M-adjoint operator
- - Calculating the success probability where the exponential is given by a Taylor series
+ - Calculating the success probability where the exponential is given by
+   a Taylor series
+ - Calculating the success probability where the exponential is from an
+   external dependency
 
-Run ./build.sh 1 to build executable to check that L is self-adjoing 
-Run ./build.sh 2 to build executable to calculate the success probability
+Run ./build.sh 0 to build matrix exponential dependencies
+Run ./build.sh 1 to build executable to check that L is self-adjoint 
+Run ./build.sh 2 to build executable to calculate the success probability of
+                 one parameter set
+Run ./build.sh 3 to build executable to calculate the success probability for
+                 a spectrum of parameters
+Run ./build.sh 4 to build executable to check eigenvectors of complete vectors
+
+To check the eigenvalues of the segmented-complete graphs, run './build.sh 2'
+then 'python3 get_eigenvalues.py'
+
+The file that calculates one success probability for a set of parameters is
+'get_succes_prob.c'
+
+'SparseMethods.h' includes matrix printing and multiplication
+
+'LaplacianHelpers.h' functions for getting the laplacian and hamiltonian
