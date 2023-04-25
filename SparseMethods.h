@@ -120,7 +120,7 @@ void multiply_M_mat(cs *A,
 
     int i = 0;
     for (i = 0; i < num_entries_top; i++) {
-        A->x[i] = val;
+        A->x[i] = 4*val;
     }
     while (i < num_entries) {
         A->x[i] *= val_low;

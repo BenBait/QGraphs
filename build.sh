@@ -33,8 +33,8 @@ rm a.out
              && set +x 
 
 [ $1 -eq 3 ] && set -x \
-             && gcc -O2 -c get_success_prob_map_data.c -lm \
-             && gcc -O2 get_success_prob_map_data.o matrix_exponential.o r8lib.o c8lib.o -lm \
+             && gcc -O3 -c get_success_prob_map_data.c -lm \
+             && gcc -O3 get_success_prob_map_data.o matrix_exponential.o r8lib.o c8lib.o -lm \
              && set +x 
 
  #&& gcc -O3 get_success_prob.c csparse/csparse.c -lm \

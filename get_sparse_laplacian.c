@@ -1,3 +1,5 @@
+/* The following code is for checking if the Laplacian is 
+ * self-adjoint in the Hilbert Space */
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
@@ -22,20 +24,8 @@ int main (int argc, char *argv[]) {
     // segs in the number of segments in each edge after decomposing
     int segs = 3;
 
-    // we have to get the number of paths through the inside of the graph
-    // the first 2 nodes have n_complete - 2 connections
-    // the next n_complete nodes have n_complete - m - 2
-    int num_inside = 2*(n_complete - segs);
-    // now there are n_complete - 2 more nodes, each with 1 fewer new path
-    int added_edges = n_complete - segs - 1;
-    // added_edges is 0 
-    while (added_edges > 0) {
-        num_inside += added_edges;
-        added_edges--;
-    }
     // n in the adjacency matrix for the segmented matrix
-    unsigned long n = n_complete*segs + num_inside*(segs - 1);
-    printf("n in segmented graph: %ld\n", n);
+    unsigned long n = n_complete*n_complete;
 
     // original entries have (n_complete - 1) adjacencies, 
     // nodes in segments each have 2 adjacencies
@@ -57,7 +47,7 @@ int main (int argc, char *argv[]) {
     free(A->p);
     free(A->x);
     free(A);
-    // entries in the Laplacian is equal to entries in the adjacecncy matrix
+    // entries in the Laplacian are equal to entries in the adjacecncy matrix
     // plus the diagonal (which is all 0 in A)
     // don't worry, this is calculated in get_laplacian, we just need it for printing
     int num_L_entries = num_entries + n;
@@ -72,6 +62,11 @@ int main (int argc, char *argv[]) {
     if (Pr) {
         printf("\nL_dag:\n");
         print_dense(L_dag, num_L_entries, n);
+    }
+
+    for (int i = 0; i < num_L_entries; i++) {
+        printf("%d\n", i);
+        assert( L->x[i] == L_dag->x[i] );
     }
 
     free(L->i);
